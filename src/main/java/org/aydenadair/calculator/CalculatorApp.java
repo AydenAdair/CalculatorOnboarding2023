@@ -54,6 +54,7 @@ public class CalculatorApp extends Application<CalculatorConfig>{
         };
 
         configurable.register(mapper);
+        configurable.register(new SwaggerResource());
     }
 
     @Override
