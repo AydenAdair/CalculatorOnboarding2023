@@ -6,6 +6,9 @@ public class MathProblem {
     private int number1, number2;
     private double result;
 
+    public MathProblem() {
+
+    }
     public MathProblem(String operator, int number1, int number2, double result) {
         this.operator = operator;
         this.number1 = number1;
