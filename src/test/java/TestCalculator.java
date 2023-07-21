@@ -1,11 +1,15 @@
 import okhttp3.*;
 import org.aydenadair.calculator.CalculatorApp;
+import org.aydenadair.calculator.MathProblem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -193,7 +197,23 @@ public class TestCalculator {
         assertEquals(Integer.MIN_VALUE, client.testMultiply((Integer.MAX_VALUE / 2) + 1, 2).execute().body());
     }
 
+    // Audit Tests
+    @Test
+    public void testAuditLogValues() throws IOException {
 
+        client.testAdd(1, 2).execute();
+        List<MathProblem> auditLog = client.testAudit().execute().body();
 
+        assertEquals("add", Objects.requireNonNull(auditLog).get(auditLog.size()-1).getOperator());
+        assertEquals(1, Objects.requireNonNull(auditLog).get(auditLog.size()-1).getNumber1());
+        assertEquals(2, Objects.requireNonNull(auditLog).get(auditLog.size()-1).getNumber2());
+        assertEquals(3, Objects.requireNonNull(auditLog).get(auditLog.size()-1).getResult());
+    }
 
+    /*
+    It would be good to add more audit tests for things like being empty, the size expanding properly,
+    and authentication. Since all these tests are run using the same client, and run in random order,
+    we can't run these tests. It would be good to look into creating a new client before each test to properly
+    test the audit log.
+     */
 }
